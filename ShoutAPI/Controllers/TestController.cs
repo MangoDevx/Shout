@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ShoutAPI.Database;
 using ShoutAPI.Database.Models;
-using System.Net;
+using ShoutAPI.Services;
 
 namespace ShoutAPI.Controllers
 {
@@ -11,19 +10,19 @@ namespace ShoutAPI.Controllers
     public class TestController : ControllerBase
     {
 
-        private DatabaseContext dbContext { get; set; }
+        private readonly TestService _testService;
 
-        public TestController(DatabaseContext dbContext)
+        public TestController(TestService _tService)
         {
-            this.dbContext = dbContext;
+            _testService = _tService;
         }
 
-        [HttpGet]
-        public IActionResult Get()
+        [HttpGet("first")]
+        public IActionResult GetFirst()
         {
             try
             {
-                var user = dbContext.TestData.FirstOrDefault();
+                var user = _testService.GetFirstTestEntry();
                 if (user != null)
                     return Ok(user);
                 else
@@ -35,24 +34,24 @@ namespace ShoutAPI.Controllers
             }
         }
 
-        [HttpPost]
-        public IActionResult Post(TestModel model)
+        [HttpGet("last")]
+        public IActionResult GetLast()
         {
             try
             {
-                var newUser = new TestModel { DateAdded = DateTime.UtcNow.ToString(), EntryName = model.EntryName, RandomBool = model.EntryName.Length < 8 };
-                dbContext.TestData.Add(newUser);
-                dbContext.SaveChanges();
-                if (dbContext.TestData.Contains(newUser))
-                    return Ok("New user added");
+                var user = _testService.GetLastTestEntry();
+                if (user != null)
+                    return Ok(user);
                 else
-                    return BadRequest("Failed to add user.");
+                    return BadRequest("No test user found.");
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
-
         }
+
+        [HttpPost]
+        public IActionResult Post(TestModel model) => StatusCode(_testService.AddTestEntry(model).Item1);
     }
 }
