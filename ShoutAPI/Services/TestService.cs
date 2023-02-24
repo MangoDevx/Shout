@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ShoutAPI.Database;
+﻿using ShoutAPI.Database;
 using ShoutAPI.Database.Models;
+using System.Text.Json;
 
 namespace ShoutAPI.Services
 {
@@ -17,16 +17,23 @@ namespace ShoutAPI.Services
 
         public TestModel? GetFirstTestEntry()
         {
-            return _dbContext.TestData.FirstOrDefault();
+            return _dbContext.TestData.OrderBy(x => x.DateAdded).FirstOrDefault();
         }
 
         public TestModel? GetLastTestEntry()
         {
-            return _dbContext.TestData.LastOrDefault();
+            return _dbContext.TestData.OrderBy(x => x.DateAdded).LastOrDefault();
         }
 
-        public IEnumerable<TestModel?> GetTestEntries() {
-            return _dbContext.TestData;
+        public (int, string) GetTestEntries() {
+            try
+            {
+                return (StatusCodes.Status200OK, JsonSerializer.Serialize(_dbContext.TestData));
+            }
+            catch (Exception ex)
+            {
+                return (StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         public (int, string) AddTestEntry(TestModel entry)

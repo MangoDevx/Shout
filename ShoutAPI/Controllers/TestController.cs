@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ShoutAPI.Database.Models;
 using ShoutAPI.Services;
 
@@ -51,7 +50,28 @@ namespace ShoutAPI.Controllers
             }
         }
 
+        [HttpGet("")]
+        public IActionResult GetAll()
+        {
+            try
+            {
+                var res = _testService.GetTestEntries();
+                if(res.Item1 != 200)
+                    return StatusCode(res.Item1, res.Item2);
+                return Ok(res.Item2);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+
+
         [HttpPost]
-        public IActionResult Post(TestModel model) => StatusCode(_testService.AddTestEntry(model).Item1);
+        public IActionResult Post(TestModel model)  {
+            var res = _testService.AddTestEntry(model);
+            return StatusCode(res.Item1, res.Item2);
+        }
     }
 }
