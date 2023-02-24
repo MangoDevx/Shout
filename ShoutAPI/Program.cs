@@ -14,7 +14,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AutoRegister();
 
 // Add database connection
-builder.Services.AddDbContext<DatabaseContext>(context => context.UseNpgsql(Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_ShoutDB")));
+var connectionString = builder.Configuration["ConnectionStrings:ShoutDB"];
+if(connectionString is null)
+    throw new Exception("Failed to get configuration string.");
+builder.Services.AddDbContext<DatabaseContext>(context => context.UseNpgsql(connectionString));
 
 var app = builder.Build();
 
