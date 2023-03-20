@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp(const MyApp());
@@ -56,7 +57,9 @@ class SplashScreenState extends State<SplashScreen> {
 
 }
 
-class MyHomePage extends StatelessWidget {
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     throw UnimplementedError();
@@ -65,5 +68,20 @@ class MyHomePage extends StatelessWidget {
 
 
 Future _requestPermissions(BuildContext context) async {
- // Hi Dill!
+ // Request needed permissions
+  Map<Permission, PermissionStatus> statuses = await [
+    Permission.location,
+    Permission.notification,
+  ].request();
+
+  // If location is disabled display an error
+  if (await Permission.location.isDenied) {
+    // Error page
+  }
+
+  // If location is enabled go to login screen
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => const LoginScreen()),
+  );
 }
