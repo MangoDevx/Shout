@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
         appBarTheme: const AppBarTheme(backgroundColor: Colors.deepPurple)
       ),
-      home: SplashScreen(),
+      home: const SplashScreen(),
     );
   }
 }
