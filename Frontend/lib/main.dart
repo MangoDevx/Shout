@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/src/views/loginview.dart';
 import 'package:frontend/src/views/startupview.dart';
 
 void main() {
@@ -16,6 +17,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         backgroundColor: Colors.white,
         primarySwatch: Colors.deepPurple,
+        primaryColor: Colors.deepPurple,
+        primaryColorDark: Colors.black,
         brightness: Brightness.dark,
         appBarTheme: const AppBarTheme(backgroundColor: Colors.deepPurple)
       ),
