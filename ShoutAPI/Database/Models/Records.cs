@@ -16,7 +16,7 @@ namespace ShoutAPI.Database.Models
             public required string Password { get; set; }
             public required string PhoneNumber { get; set; }
 
-            public required DateTime DateRegistered { get; init; }
+            public required string DateRegistered { get; init; }
 
             public string? ClientId { get; set; }
 

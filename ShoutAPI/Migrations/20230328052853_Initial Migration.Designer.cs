@@ -12,8 +12,8 @@ using ShoutAPI.Database;
 namespace ShoutAPI.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230328001156_Added Registration table")]
-    partial class AddedRegistrationtable
+    [Migration("20230328052853_Initial Migration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,57 +25,38 @@ namespace ShoutAPI.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("ShoutAPI.Database.Models.Records+RegistrationData", b =>
+            modelBuilder.Entity("ShoutAPI.Database.Models.Records+RegistrationRecord", b =>
                 {
-                    b.Property<Guid>("id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("clientId")
+                    b.Property<string>("ClientId")
                         .HasColumnType("text");
 
-                    b.Property<string>("dateRegistered")
+                    b.Property<string>("DateRegistered")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("password")
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("salt")
+                    b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("username")
+                    b.Property<string>("Salt")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("id");
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Registration");
-                });
-
-            modelBuilder.Entity("ShoutAPI.Database.Models.TestModel", b =>
-                {
-                    b.Property<long>("Key")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Key"));
-
-                    b.Property<string>("DateAdded")
-                        .HasColumnType("text");
-
-                    b.Property<string>("EntryName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("RandomBool")
-                        .HasColumnType("boolean");
-
-                    b.HasKey("Key");
-
-                    b.ToTable("TestData");
                 });
 #pragma warning restore 612, 618
         }

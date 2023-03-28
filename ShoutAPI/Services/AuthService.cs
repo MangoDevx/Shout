@@ -57,7 +57,7 @@ namespace ShoutAPI.Services
                     Username = newUser.Username,
                     Password = hashedPassword,
                     PhoneNumber = newUser.PhoneNumber,
-                    DateRegistered = DateTime.UtcNow,
+                    DateRegistered = DateTime.UtcNow.ToString("o"),
                     ClientId = null,
                     Salt = salt,
                     Id = default
