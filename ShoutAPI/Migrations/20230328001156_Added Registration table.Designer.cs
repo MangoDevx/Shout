@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ShoutAPI.Database;
@@ -11,9 +12,11 @@ using ShoutAPI.Database;
 namespace ShoutAPI.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230328001156_Added Registration table")]
+    partial class AddedRegistrationtable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace ShoutAPI.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("ShoutAPI.Database.Models.Records+RegistrationRecord", b =>
+            modelBuilder.Entity("ShoutAPI.Database.Models.Records+RegistrationData", b =>
                 {
                     b.Property<Guid>("id")
                         .ValueGeneratedOnAdd()
@@ -31,14 +34,11 @@ namespace ShoutAPI.Migrations
                     b.Property<string>("clientId")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("dateRegistered")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("password")
+                    b.Property<string>("dateRegistered")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("phoneNumber")
+                    b.Property<string>("password")
                         .IsRequired()
                         .HasColumnType("text");
 
