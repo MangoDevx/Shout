@@ -32,6 +32,7 @@ namespace ShoutAPI.Controllers
         public IActionResult RegisterUser(NewUserRecord registrationData)
         {
             // TODO: Add registration
+            var userRegistered = _authService.RegisterUser(registrationData);
             return BadRequest();
         }
     }

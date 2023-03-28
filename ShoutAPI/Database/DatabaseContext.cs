@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ShoutAPI.Database.Models;
 using static ShoutAPI.Database.Models.Records;
 
 namespace ShoutAPI.Database

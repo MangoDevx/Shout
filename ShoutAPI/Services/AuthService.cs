@@ -15,21 +15,40 @@ namespace ShoutAPI.Services
 
         public int CheckCredentials(LoginRecord loginData)
         {
-            var registrationTable = _dbContext.Registration;
-            var user = registrationTable.FirstOrDefault(x => x.username == loginData.username);
-            if (user == null)
-                return -1; // Return bad username
+            var registrationTable = _dbContext.Registration.OrderBy(x => x.Id);
 
-            var validated = BCrypt.Net.BCrypt.Verify(loginData.password, user.password);
+            // Search if the user exists in the registration table
+            var user = registrationTable.FirstOrDefault(x => x.Username.Equals(loginData.Username));
+            if (user is null)
+                return -1; // If the user does not exist, return bad username
+
+            var validated = BCrypt.Net.BCrypt.Verify(loginData.Password, user.Password);
             if (validated)
-                return 1; // Return success
-            return 0; // Return bad password
+                return 1; // Return success if the hashed password matches the provided password
+            return 0; // Otherwise return bad password
         }
 
         public int RegisterUser(NewUserRecord newUser)
         {
-            // TODO: Registration
-            return 0;
+            var registrationTable = _dbContext.Registration.OrderBy(x => x.Id);
+
+            // Check if that username already exists within our registered users
+            if(registrationTable.Any(x => x.Username.Equals(newUser.Username)))
+                return -1; // If the user exists return that it already exists
+
+            // Create a salt and hash their password
+            var salt = BCrypt.Net.BCrypt.GenerateSalt(5);
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(newUser.Password, salt);
+
+            // Create a new registration record using the new user data
+            var registrationUser = new RegistrationRecord() { Username = newUser.Username, Password = hashedPassword, PhoneNumber = newUser.PhoneNumber, DateRegistered = DateTime.UtcNow, 
+                ClientId = null, Salt = salt, Id = default };
+
+            // Add the registration user record to the table
+            _dbContext.Registration.Add(registrationUser);
+            _dbContext.SaveChanges();
+
+            return 0; // Return success
         }
     }
 }
