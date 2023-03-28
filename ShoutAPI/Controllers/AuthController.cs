@@ -21,6 +21,7 @@ namespace ShoutAPI.Controllers
             var validated = _authService.CheckCredentials(loginData);
             return validated switch
             {
+                -2 => StatusCode(500, "Server error"),
                 -1 => BadRequest("Invalid user"),
                 0 => BadRequest("Invalid password"),
                 1 => Ok("Success!"),
@@ -31,9 +32,15 @@ namespace ShoutAPI.Controllers
         [HttpPost("register")]
         public IActionResult RegisterUser(NewUserRecord registrationData)
         {
-            // TODO: Add registration
-            var userRegistered = _authService.RegisterUser(registrationData);
-            return BadRequest();
+            var registrationStatus = _authService.RegisterUser(registrationData);
+
+            return registrationStatus switch
+            {
+                -2 => StatusCode(500, "Server error"),
+                -1 => BadRequest("Username already exists"),
+                0 => Ok("Success!"),
+                _ => BadRequest("Unknown error"),
+            };
         }
     }
 }
