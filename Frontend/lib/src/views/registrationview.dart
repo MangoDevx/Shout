@@ -51,7 +51,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ))),
                 ),
                 const Padding(
-                  padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                  padding: EdgeInsets.fromLTRB(0, 12, 0, 0),
                 ),
                 Form(
                   key: _formKey,
@@ -179,6 +179,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           // Sent when a form is saved
                           if (password != null) {
                             this.password = password;
+                          } else {
+                            const Text(
+                              'Please fill out all of the above forms to continue.',
+                              style: TextStyle(color: Colors.red),
+                            );
                           }
                         },
                         validator: (String? password) {
@@ -192,7 +197,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                 ),
                 const Padding(
-                  padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                  padding: EdgeInsets.fromLTRB(0, 25, 0, 0),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -222,7 +227,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   Widget _errorText() {
     if (invalidCreds == true) {
       return const Text(
-        'Invalid Username or Password.',
+        'Please fill out all of the above forms to continue.',
         style: TextStyle(color: Colors.red),
       );
     }
