@@ -16,8 +16,8 @@ class _LoginScreenState extends State<LoginScreen> {
   bool invalidCreds = false;
   final GlobalKey<FormState> _formKey = GlobalKey();
 
-  void _sendCredentials() {
-    if (sendLoginCredentials(username, password)) {
+  Future<void> _sendCredentials() async {
+    if (await sendLoginCredentials(username, password)) {
       // Clear the data from memory
       username = '';
       password = '';
