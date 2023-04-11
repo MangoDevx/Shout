@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/src/controllers/logincontroller.dart';
+import 'package:frontend/src/controllers/loginregistercontroller.dart';
 import 'package:frontend/src/views/registrationview.dart';
 
 class LoginScreen extends StatefulWidget {
