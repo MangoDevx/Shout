@@ -17,7 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   void _sendCredentials() {
-    if (sendCredentials(username, password)) {
+    if (sendLoginCredentials(username, password)) {
       // Clear the data from memory
       username = '';
       password = '';
