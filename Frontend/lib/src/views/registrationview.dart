@@ -16,18 +16,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   void _sendCredentials() {
-    if (sendCredentials(username, password)) {
-      // Clear the data from memory
-      username = '';
-      password = '';
-
-      // TODO: Move the user further into the app, we need someway to store a session token as well.
-
-    } else {
-      setState(() {
-        invalidCreds = true;
-      });
-    }
+    // TODO: Implement
+    // if (sendRegistrationCredentials(username, password)) {
+    //   // Clear the data from memory
+    //   username = '';
+    //   password = '';
+    //
+    //   // TODO: Move the user further into the app, we need someway to store a session token as well.
+    //
+    // } else {
+    //   setState(() {
+    //     invalidCreds = true;
+    //   });
+    // }
   }
 
   @override
