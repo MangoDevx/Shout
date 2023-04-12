@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/src/controllers/loginregistercontroller.dart';
 import 'package:frontend/src/views/homeview.dart';
 import 'package:frontend/src/views/registrationview.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

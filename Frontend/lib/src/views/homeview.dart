@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/src/controllers/homecontroller.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -29,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
               BottomChatBar(
                 onSendMessage: (String message) {
                   // TODO: Handle message sending
+                  sendMessage();
                 },
               )
             ],
