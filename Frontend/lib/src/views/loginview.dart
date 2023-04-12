@@ -131,6 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         color: Theme.of(context).primaryColor),
                                   ),
                                 ),
+                                obscureText: true,
                                 onSaved: (String? password) {
                                   // Sent when a form is saved
                                   if (password != null) {
