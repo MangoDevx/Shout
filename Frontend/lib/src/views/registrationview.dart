@@ -1,6 +1,4 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/src/controllers/loginregistercontroller.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
