@@ -15,24 +15,30 @@ class _LoginScreenState extends State<LoginScreen> {
   String username = '';
   String password = '';
   bool invalidCreds = false;
+  String errorOutput = '';
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   Future<void> _sendCredentials() async {
-    if (await sendLoginCredentials(username, password) == 200) {
+    var response = await sendLoginCredentials(username, password);
+    if (response.statusCode == 200) {
       // Clear the data from memory
       username = '';
       password = '';
 
-      // TODO: Move the user further into the app, we need someway to store a session token as well.
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
-      );
+      loginUser();
     } else {
       setState(() {
         invalidCreds = true;
+        errorOutput = response.responseBody;
       });
     }
+  }
+
+  void loginUser() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const HomeScreen()),
+    );
   }
 
   @override
@@ -154,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const Padding(
                   padding: EdgeInsets.fromLTRB(0, 25, 0, 0),
                 ),
-                _errorText(),
+                _errorText(errorOutput),
               ],
             ),
           ),
@@ -183,11 +189,11 @@ class _LoginScreenState extends State<LoginScreen> {
     ]));
   }
 
-  Widget _errorText() {
+  Widget _errorText(String error) {
     if (invalidCreds == true) {
-      return const Text(
-        'Invalid Username or Password.',
-        style: TextStyle(color: Colors.red),
+      return Text(
+        error,
+        style: const TextStyle(color: Colors.red),
       );
     }
     return Container();
