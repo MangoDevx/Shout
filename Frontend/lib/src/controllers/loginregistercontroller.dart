@@ -7,8 +7,8 @@ Future<int> sendLoginCredentials(String username, String password) async {
   String jsonPayload = jsonEncode(payload);
 
   // TODO: This really shouldn't be static but since its a small project right now, fix in future if desired
-  var url = Uri.https("https:/shoutmessaging.azurewebsites.net", "api/auth/login");
-  var response = await http.post(url, body: jsonPayload);
+  var url = Uri.https("shoutmessaging.azurewebsites.net", "api/auth/login");
+  var response = await http.post(url, body: jsonPayload, headers: {"Content-Type": "application/json"});
 
   if(response.statusCode == 200) {
     return 200;
