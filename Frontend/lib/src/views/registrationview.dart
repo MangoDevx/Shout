@@ -72,6 +72,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         resizeToAvoidBottomInset: true,
+        appBar: topAppBar(),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
@@ -279,6 +280,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ),
           ),
         ));
+  }
+
+  PreferredSizeWidget topAppBar() {
+    // TODO: Design top bar
+    return AppBar(
+      backgroundColor: Theme.of(context).primaryColorLight,
+      centerTitle: true,
+      title: Image.asset('assets/shoutnotext.png', fit: BoxFit.contain, height: 35),
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).primaryColor),
+        onPressed: () => Navigator.of(context).pop(),
+      ),
+    );
   }
 
   Widget _spacer() {
