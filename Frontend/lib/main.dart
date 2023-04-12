@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
         appBarTheme: const AppBarTheme(backgroundColor: Colors.deepPurple)
       ),
-      debugShowCheckedModeBanner: false,
+      //debugShowCheckedModeBanner: false,
       home: const SplashScreen(),
     );
   }
