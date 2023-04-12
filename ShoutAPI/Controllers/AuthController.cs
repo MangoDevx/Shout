@@ -22,8 +22,8 @@ namespace ShoutAPI.Controllers
             return validated switch
             {
                 -2 => StatusCode(500, "Server error"),
-                -1 => BadRequest("Invalid user"),
-                0 => BadRequest("Invalid password"),
+                -1 => BadRequest("Invalid username/password"),
+                0 => BadRequest("Invalid username/password"),
                 1 => Ok("Success!"),
                 _ => BadRequest("Invalid username or password."),
             };
