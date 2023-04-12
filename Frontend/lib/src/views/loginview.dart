@@ -97,6 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                       ),
                       TextFormField(
+                        // TODO: Blur / star out password text
                         style: TextStyle(
                             color: Theme.of(context).primaryColorDark),
                         decoration: InputDecoration(
