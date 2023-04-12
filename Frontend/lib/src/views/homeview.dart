@@ -11,8 +11,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      'Logged in - Home Page WIP'
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: const Text(
+        'Logged in - Home Page WIP'
+      ),
     );
   }
 
