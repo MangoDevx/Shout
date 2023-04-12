@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/src/views/loginview.dart';
 import 'package:frontend/src/views/startupview.dart';
 
 void main() {
