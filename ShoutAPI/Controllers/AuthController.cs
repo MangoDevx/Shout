@@ -25,7 +25,7 @@ namespace ShoutAPI.Controllers
                 -1 => BadRequest("Invalid user"),
                 0 => BadRequest("Invalid password"),
                 1 => Ok("Success!"),
-                _ => BadRequest("Unknown error"),
+                _ => BadRequest("Invalid username or password."),
             };
         }
 
