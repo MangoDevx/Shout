@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
   
-  Widget homeAppBar() { 
+  PreferredSizeWidget homeAppBar() {
     // TODO: Design top bar
     return AppBar(
         title: const Text('AppBar Demo'),

@@ -236,9 +236,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   Widget _errorText(String value) {
     if (invalidCreds == true) {
-      return const Text(
+      return Text(
         value,
-        style: TextStyle(color: Colors.red),
+        style: const TextStyle(color: Colors.red),
       );
     }
     return Container();

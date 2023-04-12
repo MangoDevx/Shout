@@ -3,7 +3,7 @@ class RegisterAuthModel {
   final String password;
   final String phoneNumber;
 
-  const LoginAuthModel({required this.username, required this.password, required this.phoneNumber});
+  const RegisterAuthModel({required this.username, required this.password, required this.phoneNumber});
 
   Map toJson() => {
     'Username': username,
