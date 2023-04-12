@@ -20,11 +20,11 @@ namespace ShoutAPI.Services
                 var registrationTable = _dbContext.Registration.OrderBy(x => x.Id);
 
                 // Search if the user exists in the registration table
-                var user = registrationTable.FirstOrDefault(x => x.Username.Equals(loginData.Username));
-                if (user is null)
+                var password = registrationTable.OrderBy(x => x.Id).Where(x => x.Username == loginData.Username).Select(x => x.Password).Single();
+                if (password is null)
                     return -1; // If the user does not exist, return bad username
 
-                var validated = BCrypt.Net.BCrypt.Verify(loginData.Password, user.Password);
+                var validated = BCrypt.Net.BCrypt.Verify(loginData.Password, password);
                 if (validated)
                     return 1; // Return success if the hashed password matches the provided password
                 return 0; // Otherwise return bad password
