@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/src/views/homeview.dart';
+import 'package:frontend/src/controllers/loginregistercontroller.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -10,23 +12,33 @@ class RegistrationScreen extends StatefulWidget {
 class _RegistrationScreenState extends State<RegistrationScreen> {
   String username = '';
   String password = '';
+  String phoneNumber = '';
+  String errorOutput = '';
   bool invalidCreds = false;
   final GlobalKey<FormState> _formKey = GlobalKey();
 
-  void _sendCredentials() {
-    // TODO: Implement
-    // if (sendRegistrationCredentials(username, password)) {
-    //   // Clear the data from memory
-    //   username = '';
-    //   password = '';
-    //
-    //   // TODO: Move the user further into the app, we need someway to store a session token as well.
-    //
-    // } else {
-    //   setState(() {
-    //     invalidCreds = true;
-    //   });
-    // }
+  Future<void> _sendCredentials() async {
+    var response = await sendRegistrationCredentials(username, password, phoneNumber);
+    if (response.statusCode == 200) {
+      // Clear the data from memory
+      username = '';
+      password = '';
+      phoneNumber = '';
+
+      loginUser();
+    } else {
+      setState(() {
+        invalidCreds = true;
+        errorOutput = response.responseBody;
+      });
+    }
+  }
+
+  void loginUser() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const HomeScreen()),
+    );
   }
 
   @override
@@ -173,10 +185,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 color: Theme.of(context).primaryColor),
                           ),
                         ),
-                        onSaved: (String? password) {
+                        onSaved: (String? phoneNumber) {
                           // Sent when a form is saved
-                          if (password != null) {
-                            this.password = password;
+                          if (phoneNumber != null) {
+                            this.phoneNumber = phoneNumber;
                           } else {
                             const Text(
                               'Please fill out all of the above forms to continue.',
@@ -184,9 +196,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             );
                           }
                         },
-                        validator: (String? password) {
+                        validator: (String? phoneNumber) {
                           // Validation checks go here
-                          if (password != null && password.length > 1) {
+                          if (phoneNumber != null && phoneNumber.length > 1) {
                             _formKey.currentState!.save();
                           }
                         },
@@ -215,17 +227,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 const Padding(
                   padding: EdgeInsets.fromLTRB(0, 25, 0, 0),
                 ),
-                _errorText(),
+                _errorText(errorOutput),
               ],
             ),
           ),
         ));
   }
 
-  Widget _errorText() {
+  Widget _errorText(String value) {
     if (invalidCreds == true) {
       return const Text(
-        'Please fill out all of the above forms to continue.',
+        value,
         style: TextStyle(color: Colors.red),
       );
     }
