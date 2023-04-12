@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/src/controllers/loginregistercontroller.dart';
+import 'package:frontend/src/views/homeview.dart';
 import 'package:frontend/src/views/registrationview.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -17,13 +18,16 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   Future<void> _sendCredentials() async {
-    if (await sendLoginCredentials(username, password)) {
+    if (await sendLoginCredentials(username, password) == 200) {
       // Clear the data from memory
       username = '';
       password = '';
 
       // TODO: Move the user further into the app, we need someway to store a session token as well.
-
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
     } else {
       setState(() {
         invalidCreds = true;
