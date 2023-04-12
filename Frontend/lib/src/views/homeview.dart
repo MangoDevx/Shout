@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
       title: Image.asset('assets/shoutnotext.png', fit: BoxFit.contain, height: 35),
       leading: IconButton(
         icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).primaryColor),
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: () => _onBackPressed(),
       ),
       actions: <Widget>[
         IconButton(
