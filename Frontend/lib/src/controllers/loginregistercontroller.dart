@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:frontend/src/models/loginpayload.dart';
 
-Future<bool> sendLoginCredentials(String username, String password) async {
+Future<int> sendLoginCredentials(String username, String password) async {
   LoginPayload payload = LoginPayload(username: username, password: password);
   String jsonPayload = jsonEncode(payload);
 
@@ -11,12 +11,12 @@ Future<bool> sendLoginCredentials(String username, String password) async {
   var response = await http.post(url, body: jsonPayload);
 
   if(response.statusCode == 200) {
-    return true;
+    return 200;
   }
   else {
     // TODO: Remove print in production
     print(response.body);
-    return false;
+    return response.statusCode;
   }
 }
 
