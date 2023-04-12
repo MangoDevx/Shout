@@ -18,6 +18,7 @@ class SplashScreenState extends State<SplashScreen> {
   @override
   initState() {
     super.initState();
+    var screen = const LoginScreen();
     Future.delayed(
         const Duration(seconds: 3),
         () async => {
@@ -25,7 +26,7 @@ class SplashScreenState extends State<SplashScreen> {
                 {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const LoginScreen()),
+                    MaterialPageRoute(builder: (context) => screen),
                   )
                 },
             });
