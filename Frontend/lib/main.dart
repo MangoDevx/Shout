@@ -7,7 +7,6 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -18,9 +17,11 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.deepPurple,
         primaryColor: Colors.deepPurple,
         primaryColorDark: Colors.black,
+        primaryColorLight: const Color(0xfff5f5f5),
         brightness: Brightness.dark,
         appBarTheme: const AppBarTheme(backgroundColor: Colors.deepPurple)
       ),
+      debugShowCheckedModeBanner: false,
       home: const SplashScreen(),
     );
   }
