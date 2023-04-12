@@ -1,7 +1,8 @@
 import 'dart:convert';
-import 'package:frontend/src/models/authresponsemodel.dart';
 import 'package:http/http.dart' as http;
+import 'package:frontend/src/models/authresponsemodel.dart';
 import 'package:frontend/src/models/loginauthmodel.dart';
+import 'package:frontend/src/models/registerauthmodel.dart';
 
 Future<AuthResponseModel> sendLoginCredentials(String username, String password) async {
   LoginAuthModel payload = LoginAuthModel(username: username, password: password);
@@ -14,6 +15,12 @@ Future<AuthResponseModel> sendLoginCredentials(String username, String password)
   return AuthResponseModel(statusCode: response.statusCode, responseBody: response.body);
 }
 
-bool sendRegistrationCredentials(String username, String password, String phoneNumber) {
-  return false;
+Future<AuthResponseModel> sendRegistrationCredentials(String username, String password, String phoneNumber) async {
+  RegisterAuthModel payload = RegisterAuthModel(username: username, password: password, phoneNumber: phoneNumber);
+  String jsonPayload = jsonEncode(payload);
+
+  var url = Uri.https("shoutmessaging.azurewebsites.net", "api/auth/register");
+  var response = await http.post(url, body: jsonPayload, headers: {"Content-Type": "application/json"});
+
+  return AuthResponseModel(statusCode: response.statusCode, responseBody: response.body);
 }
