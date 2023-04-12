@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/src/controllers/startupcontroller.dart';
 import 'package:frontend/src/views/loginview.dart';
+import 'package:frontend/src/views/nolocationview.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -27,6 +28,14 @@ class SplashScreenState extends State<SplashScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => screen),
+                  )
+                }
+              else
+                {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const NoLocationScreen()),
                   )
                 },
             });
