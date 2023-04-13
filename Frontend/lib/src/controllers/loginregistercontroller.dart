@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/src/models/securestorage.dart';
 import 'package:http/http.dart' as http;
 import 'package:frontend/src/models/authresponsemodel.dart';
