@@ -1,7 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/src/views/startupview.dart';
 
-void main() {
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -13,14 +16,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Shout!',
       theme: ThemeData(
-        backgroundColor: Colors.white,
-        primarySwatch: Colors.deepPurple,
-        primaryColor: Colors.deepPurple,
-        primaryColorDark: Colors.black,
-        primaryColorLight: const Color(0xfff5f5f5),
-        brightness: Brightness.dark,
-        appBarTheme: const AppBarTheme(backgroundColor: Colors.deepPurple)
-      ),
+          backgroundColor: Colors.white,
+          primarySwatch: Colors.deepPurple,
+          primaryColor: Colors.deepPurple,
+          primaryColorDark: Colors.black,
+          primaryColorLight: const Color(0xfff5f5f5),
+          brightness: Brightness.dark,
+          appBarTheme: const AppBarTheme(backgroundColor: Colors.deepPurple)),
       //debugShowCheckedModeBanner: false,
       home: const SplashScreen(),
     );
