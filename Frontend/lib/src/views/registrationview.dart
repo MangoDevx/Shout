@@ -238,7 +238,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           });
                         }
                         else {
-                          () async { await createUserWithEmailAndPassword(); };
+                          createUserWithEmailAndPassword();
                         }
                       },
                       child: const SizedBox(
