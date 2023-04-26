@@ -39,7 +39,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-        builder: (context) => const enterUsername()),
+        builder: (context) => const UsernameInput()),
       ); 
     }
   }
