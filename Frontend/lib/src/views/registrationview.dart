@@ -48,7 +48,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     }
     setState(() {
       loggedIn = true;
-    });
+    }); // AAAAAAAAA
   }
 
   @override
