@@ -25,6 +25,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   bool isLogin = false;
 
+  if(!invalidCreds)
+  {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+      builder: (context) => const UsernameInput()),
+    ); 
+  }
+
   Future<void> createUserWithEmailAndPassword() async {
     try {
       await Auth().createUserWithEmailAndPassword(email: email, password: password);
@@ -34,13 +43,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         errorOutput = e.message ?? 'Error';
         invalidCreds = true;
       });
-    }
-    if(invalidCreds == false) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-        builder: (context) => const UsernameInput()),
-      ); 
     }
   }
 
