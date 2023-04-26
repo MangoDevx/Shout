@@ -36,16 +36,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       });
     }
     if(invalidCreds == false) {
-      loginUser();
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+        builder: (context) => const enterUsername()),
+      ); 
     }
-  }
-
-  void loginUser() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-      builder: (context) => const RegistrationScreen()),
-    );
   }
 
   @override
