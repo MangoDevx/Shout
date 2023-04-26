@@ -1,6 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
+import 'package:frontend/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/src/views/homeview.dart';
 import 'package:frontend/src/controllers/loginregistercontroller.dart';
+import 'package:frontend/src/views/loginview.dart';
+import 'package:frontend/src/views/enterUsername.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -10,7 +15,7 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  String username = '';
+  String email = '';
   String password = '';
   String phoneNumber = '';
   String errorOutput = '';
@@ -18,52 +23,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   bool passwordsMatch = false;
   final GlobalKey<FormState> _formKey = GlobalKey();
 
-  Future<void> _sendCredentials() async {
+  bool isLogin = false;
 
-    if(username == '' || password == '' || phoneNumber == '') {
+  Future<void> createUserWithEmailAndPassword() async {
+    try {
+      await Auth()
+          .createUserWithEmailAndPassword(email: email, password: password);
+
+      //push to home screen
+    } on FirebaseAuthException catch (e) {
       setState(() {
+        errorOutput = e.message ?? 'Error';
         invalidCreds = true;
-        errorOutput = 'Missing required information. Please double check you filled everything out.';
-      });
-      return;
-    }
-
-    if(double.tryParse(phoneNumber) == null) {
-      setState(() {
-        invalidCreds = true;
-        errorOutput = 'Invalid phone number.';
-      });
-      return;
-    }
-
-    if(!passwordsMatch) {
-      setState(() {
-        invalidCreds = true;
-        errorOutput = 'Passwords do not match.';
-      });
-      return;
-    }
-
-    var response = await sendRegistrationCredentials(username, password, phoneNumber);
-    if (response.statusCode == 200) {
-      // Clear the data from memory
-      username = '';
-      password = '';
-      phoneNumber = '';
-
-      loginUser();
-    } else {
-      setState(() {
-        invalidCreds = true;
-        errorOutput = response.responseBody;
       });
     }
+    loginUser();
   }
 
   void loginUser() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
+      MaterialPageRoute(builder: (context) => const UsernameInput()),
     );
   }
 
@@ -108,10 +88,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             decoration: InputDecoration(
                               icon: Icon(Icons.person_pin,
                                   color: Theme.of(context).primaryColor),
-                              hintText: 'Username',
-                              hintStyle:
-                                  TextStyle(color: Theme.of(context).primaryColor),
-                              labelText: 'Username',
+                              hintText: 'Email',
+                              hintStyle: TextStyle(
+                                  color: Theme.of(context).primaryColor),
+                              labelText: 'Email',
                               labelStyle: TextStyle(
                                   color: Theme.of(context).primaryColorDark),
                               enabledBorder: UnderlineInputBorder(
@@ -120,23 +100,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     color: Theme.of(context).primaryColor),
                               ),
                             ),
-                            onSaved: (String? username) {
+                            onSaved: (String? email) {
                               // Sent when a form is saved
-                              if (username != null) {
-                                this.username = username;
+                              if (email != null) {
+                                this.email = email;
                               }
                             },
-                            validator: (String? username) {
+                            validator: (String? email) {
                               // Validation checks go here
                               // I.E we don't want @'s or weird characters in names
-                              if (username != null && username.length > 1) {
+                              if (email != null && email.length > 1) {
                                 _formKey.currentState!.save();
                               }
                             },
                           ),
-
                           _spacer(),
-
                           TextFormField(
                             style: TextStyle(
                                 color: Theme.of(context).primaryColorDark),
@@ -145,8 +123,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   color: Theme.of(context).primaryColor),
                               iconColor: Theme.of(context).primaryColor,
                               hintText: 'Password',
-                              hintStyle:
-                                  TextStyle(color: Theme.of(context).primaryColor),
+                              hintStyle: TextStyle(
+                                  color: Theme.of(context).primaryColor),
                               labelText: 'Password',
                               labelStyle: TextStyle(
                                   color: Theme.of(context).primaryColorDark),
@@ -156,6 +134,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     color: Theme.of(context).primaryColor),
                               ),
                             ),
+                            obscureText: true,
                             onSaved: (String? password) {
                               // Sent when a form is saved
                               if (password != null) {
@@ -169,9 +148,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               }
                             },
                           ),
-
                           _spacer(),
-
                           TextFormField(
                             style: TextStyle(
                                 color: Theme.of(context).primaryColorDark),
@@ -180,8 +157,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   color: Theme.of(context).primaryColor),
                               iconColor: Theme.of(context).primaryColor,
                               hintText: 'Confirm Password',
-                              hintStyle:
-                                  TextStyle(color: Theme.of(context).primaryColor),
+                              hintStyle: TextStyle(
+                                  color: Theme.of(context).primaryColor),
                               labelText: 'Confirm Password',
                               labelStyle: TextStyle(
                                   color: Theme.of(context).primaryColorDark),
@@ -191,21 +168,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     color: Theme.of(context).primaryColor),
                               ),
                             ),
+                            obscureText: true,
                             validator: (String? confirmedPassword) {
                               // Validation checks go here
-                              if (confirmedPassword != null && password.length > 1) {
-                                if(confirmedPassword == password) {
+                              if (confirmedPassword != null &&
+                                  password.length > 1) {
+                                if (confirmedPassword == password) {
                                   passwordsMatch = true;
-                                }
-                                else {
+                                } else {
                                   passwordsMatch = false;
                                 }
                               }
                             },
                           ),
-
                           _spacer(),
-
                           TextFormField(
                             style: TextStyle(
                                 color: Theme.of(context).primaryColorDark),
@@ -214,8 +190,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   color: Theme.of(context).primaryColor),
                               iconColor: Theme.of(context).primaryColor,
                               hintText: 'Phone Number',
-                              hintStyle:
-                                  TextStyle(color: Theme.of(context).primaryColor),
+                              hintStyle: TextStyle(
+                                  color: Theme.of(context).primaryColor),
                               labelText: 'Phone Number',
                               labelStyle: TextStyle(
                                   color: Theme.of(context).primaryColorDark),
@@ -240,10 +216,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             },
                             validator: (String? phoneNumber) {
                               // Validation checks go here
-                              if(phoneNumber != null) {
+                              if (phoneNumber != null) {
                                 phoneNumber = phoneNumber.replaceAll(' ', '');
                                 phoneNumber = phoneNumber.replaceAll('-', '');
-                                if(phoneNumber.length <= 11 && phoneNumber.length >= 10) {
+                                if (phoneNumber.length <= 11 &&
+                                    phoneNumber.length >= 10) {
                                   _formKey.currentState!.save();
                                 }
                               }
@@ -257,7 +234,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        _sendCredentials();
+                        createUserWithEmailAndPassword();
                       },
                       child: const SizedBox(
                           width: double.infinity,
@@ -270,6 +247,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     const Padding(
                       padding: EdgeInsets.fromLTRB(0, 25, 0, 0),
                     ),
+                    login(),
                     const Padding(
                       padding: EdgeInsets.fromLTRB(0, 25, 0, 0),
                     ),
@@ -287,7 +265,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return AppBar(
       backgroundColor: Theme.of(context).primaryColorLight,
       centerTitle: true,
-      title: Image.asset('assets/shoutnotext.png', fit: BoxFit.contain, height: 35),
+      title: Image.asset('assets/shoutnotext.png',
+          fit: BoxFit.contain, height: 35),
       leading: IconButton(
         icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).primaryColor),
         onPressed: () => Navigator.of(context).pop(),
@@ -309,5 +288,26 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       );
     }
     return Container();
+  }
+
+  Widget login() {
+    const TextStyle defaultStyle =
+        TextStyle(color: Colors.grey, fontSize: 15.0);
+    const TextStyle linkStyle = TextStyle(color: Colors.blue);
+
+    return RichText(
+        text: TextSpan(style: defaultStyle, children: <TextSpan>[
+      const TextSpan(text: "Have an account? "),
+      TextSpan(
+          text: 'Login.',
+          style: linkStyle,
+          recognizer: TapGestureRecognizer()
+            ..onTap = () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+              );
+            })
+    ]));
   }
 }

@@ -4,6 +4,8 @@ import 'package:frontend/src/controllers/loginregistercontroller.dart';
 import 'package:frontend/src/views/homeview.dart';
 import 'package:frontend/src/views/registrationview.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:frontend/auth.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,24 +15,22 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  String username = '';
+  String email = '';
   String password = '';
   bool invalidCreds = false;
   String errorOutput = '';
   final GlobalKey<FormState> _formKey = GlobalKey();
 
-  Future<void> _sendCredentials() async {
-    var response = await sendLoginCredentials(username, password);
-    if (response.statusCode == 200) {
-      // Clear the data from memory
-      username = '';
-      password = '';
+  String? errorMessage = '';
+  bool isLogin = true;
 
+  Future<void> signInWithEmailAndPassword() async {
+    try {
+      await Auth().signInWithEmailAndPassword(email: email, password: password);
       loginUser();
-    } else {
+    } on FirebaseAuthException catch (e) {
       setState(() {
-        invalidCreds = true;
-        errorOutput = response.responseBody;
+        errorMessage = e.message;
       });
     }
   }
@@ -84,10 +84,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 decoration: InputDecoration(
                                   icon: Icon(Icons.person_pin,
                                       color: Theme.of(context).primaryColor),
-                                  hintText: 'Username',
+                                  hintText: 'Email',
                                   hintStyle: TextStyle(
                                       color: Theme.of(context).primaryColor),
-                                  labelText: 'Username',
+                                  labelText: 'Email',
                                   labelStyle: TextStyle(
                                       color:
                                           Theme.of(context).primaryColorDark),
@@ -97,16 +97,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                         color: Theme.of(context).primaryColor),
                                   ),
                                 ),
-                                onSaved: (String? username) {
+                                onSaved: (String? email) {
                                   // Sent when a form is saved
-                                  if (username != null) {
-                                    this.username = username;
+                                  if (email != null) {
+                                    this.email = email;
                                   }
                                 },
-                                validator: (String? username) {
+                                validator: (String? email) {
                                   // Validation checks go here
                                   // I.E we don't want @'s or weird characters in names
-                                  if (username != null && username.length > 1) {
+                                  if (email != null && email.length > 1) {
                                     _formKey.currentState!.save();
                                   }
                                 },
@@ -154,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            _sendCredentials();
+                            signInWithEmailAndPassword();
                           },
                           child: const SizedBox(
                               width: double.infinity,

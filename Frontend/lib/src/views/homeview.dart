@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/src/controllers/homecontroller.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:frontend/auth.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -9,6 +11,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final User? user = Auth().currentUser;
+
+  Future<void> signOut() async {
+    await Auth().signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -45,7 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return AppBar(
       backgroundColor: Theme.of(context).primaryColorLight,
       centerTitle: true,
-      title: Image.asset('assets/shoutnotext.png', fit: BoxFit.contain, height: 35),
+      title: Image.asset('assets/shoutnotext.png',
+          fit: BoxFit.contain, height: 35),
       leading: IconButton(
         icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).primaryColor),
         onPressed: () => _onBackPressed(),
