@@ -2,10 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:frontend/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/src/views/homeview.dart';
-import 'package:frontend/src/controllers/loginregistercontroller.dart';
 import 'package:frontend/src/views/loginview.dart';
-import 'package:frontend/src/views/enterUsername.dart';
 import 'package:frontend/src/views/settingsview.dart';
 
 class RegistrationScreen extends StatefulWidget {
