@@ -231,8 +231,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        log('pressed');
-                        createUserWithEmailAndPassword();
+                        if(!passwordsMatch) {
+                          setState(() {
+                            errorOutput = 'Passwords do not match.';
+                            invalidCreds = true;
+                          });
+                        }
+                        else {
+                          () async { await createUserWithEmailAndPassword(); };
+                        }
                       },
                       child: const SizedBox(
                           width: double.infinity,
