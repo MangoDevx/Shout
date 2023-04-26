@@ -1,9 +1,11 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:frontend/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/src/views/homeview.dart';
 import 'package:frontend/src/views/loginview.dart';
-import 'package:frontend/src/views/settingsview.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -19,36 +21,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   String errorOutput = '';
   bool invalidCreds = false;
   bool passwordsMatch = false;
-  bool loggedIn = false;
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   bool isLogin = false;
 
-  @override
-  initState() {
-    super.initState();
-    if (loggedIn) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const SettingsScreen()),
-      );
-    }
-  }
-
   Future<void> createUserWithEmailAndPassword() async {
     try {
-      await Auth()
-          .createUserWithEmailAndPassword(email: email, password: password);
-      //push to home screen
+      await Auth().createUserWithEmailAndPassword(email: email, password: password);
+      loginUser();
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorOutput = e.message ?? 'Error';
         invalidCreds = true;
       });
     }
-    setState(() {
-      loggedIn = true;
-    }); // AAAAAAAAA
+  }
+
+  void loginUser() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const HomeScreen()),
+    );
   }
 
   @override
@@ -238,6 +231,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                     ElevatedButton(
                       onPressed: () {
+                        log('pressed');
                         createUserWithEmailAndPassword();
                       },
                       child: const SizedBox(
@@ -288,6 +282,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       return Text(
         value,
         style: const TextStyle(color: Colors.red),
+        textAlign: TextAlign.center,
       );
     }
     return Container();

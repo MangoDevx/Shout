@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:frontend/src/models/securestorage.dart';
 import 'package:http/http.dart' as http;
 import 'package:frontend/src/models/authresponsemodel.dart';
 import 'package:frontend/src/models/loginauthmodel.dart';
@@ -16,11 +15,6 @@ Future<AuthResponseModel> sendLoginCredentials(
   var response = await http.post(url,
       body: jsonPayload, headers: {"Content-Type": "application/json"});
 
-  if (response.statusCode == 200) {
-    final storage = SecureStorage().storage;
-    await storage.write(key: 'username', value: username);
-  }
-
   return AuthResponseModel(
       statusCode: response.statusCode, responseBody: response.body);
 }
@@ -34,11 +28,6 @@ Future<AuthResponseModel> sendRegistrationCredentials(
   var url = Uri.https("shoutmessaging.azurewebsites.net", "api/auth/register");
   var response = await http.post(url,
       body: jsonPayload, headers: {"Content-Type": "application/json"});
-
-  if (response.statusCode == 200) {
-    final storage = SecureStorage().storage;
-    await storage.write(key: 'username', value: username);
-  }
 
   return AuthResponseModel(
       statusCode: response.statusCode, responseBody: response.body);

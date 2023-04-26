@@ -40,7 +40,6 @@ dependencies:
   permission_handler: ^10.2.0
   mvc_pattern: ^8.12.0
   http: ^0.13.5
-  flutter_secure_storage: ^5.0.0
   firebase_core: ^2.10.0
   firebase_auth: ^4.4.2
 

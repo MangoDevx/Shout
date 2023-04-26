@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
               BottomChatBar(
                 onSendMessage: (String message) {
                   // TODO: Handle message sending
-                  sendMessage();
+
                 },
               )
             ],
