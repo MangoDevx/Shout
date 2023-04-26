@@ -6,6 +6,7 @@ import 'package:frontend/src/views/homeview.dart';
 import 'package:frontend/src/controllers/loginregistercontroller.dart';
 import 'package:frontend/src/views/loginview.dart';
 import 'package:frontend/src/views/enterUsername.dart';
+import 'package:frontend/src/views/settingsview.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -21,22 +22,26 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   String errorOutput = '';
   bool invalidCreds = false;
   bool passwordsMatch = false;
+  bool loggedIn = false;
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   bool isLogin = false;
 
-  if(!invalidCreds)
-  {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-      builder: (context) => const UsernameInput()),
-    ); 
+  @override
+  initState() {
+    super.initState();
+    if (loggedIn) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const SettingsScreen()),
+      );
+    }
   }
 
   Future<void> createUserWithEmailAndPassword() async {
     try {
-      await Auth().createUserWithEmailAndPassword(email: email, password: password);
+      await Auth()
+          .createUserWithEmailAndPassword(email: email, password: password);
       //push to home screen
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -44,6 +49,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         invalidCreds = true;
       });
     }
+    setState(() {
+      loggedIn = true;
+    });
   }
 
   @override
