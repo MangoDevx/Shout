@@ -27,9 +27,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   Future<void> createUserWithEmailAndPassword() async {
     try {
-      await Auth()
-          .createUserWithEmailAndPassword(email: email, password: password);
-
+      await Auth().createUserWithEmailAndPassword(email: email, password: password);
       //push to home screen
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -37,13 +35,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         invalidCreds = true;
       });
     }
-    loginUser();
+    if(invalidCreds == false) {
+      loginUser();
+    }
   }
 
   void loginUser() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const UsernameInput()),
+      MaterialPageRoute(
+      builder: (context) => const RegistrationScreen()),
     );
   }
 
@@ -261,7 +262,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   PreferredSizeWidget topAppBar() {
-    // TODO: Design top bar
     return AppBar(
       backgroundColor: Theme.of(context).primaryColorLight,
       centerTitle: true,
