@@ -27,7 +27,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   Future<void> createUserWithEmailAndPassword() async {
     try {
-      await Auth().createUserWithEmailAndPassword(email: email, password: password);
+      await Auth()
+          .createUserWithEmailAndPassword(email: email, password: password);
       loginUser();
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -61,8 +62,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(
-                      height: 150,
-                      width: 150,
+                      height: 200,
+                      width: 175,
                       child: DecoratedBox(
                           decoration: BoxDecoration(
                               image: DecorationImage(
@@ -116,73 +117,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             style: TextStyle(
                                 color: Theme.of(context).primaryColorDark),
                             decoration: InputDecoration(
-                              icon: Icon(Icons.lock,
-                                  color: Theme.of(context).primaryColor),
-                              iconColor: Theme.of(context).primaryColor,
-                              hintText: 'Password',
-                              hintStyle: TextStyle(
-                                  color: Theme.of(context).primaryColor),
-                              labelText: 'Password',
-                              labelStyle: TextStyle(
-                                  color: Theme.of(context).primaryColorDark),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 3,
-                                    color: Theme.of(context).primaryColor),
-                              ),
-                            ),
-                            obscureText: true,
-                            onSaved: (String? password) {
-                              // Sent when a form is saved
-                              if (password != null) {
-                                this.password = password;
-                              }
-                            },
-                            validator: (String? password) {
-                              // Validation checks go here
-                              if (password != null && password.length > 1) {
-                                _formKey.currentState!.save();
-                              }
-                            },
-                          ),
-                          _spacer(),
-                          TextFormField(
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColorDark),
-                            decoration: InputDecoration(
-                              icon: Icon(Icons.lock,
-                                  color: Theme.of(context).primaryColor),
-                              iconColor: Theme.of(context).primaryColor,
-                              hintText: 'Confirm Password',
-                              hintStyle: TextStyle(
-                                  color: Theme.of(context).primaryColor),
-                              labelText: 'Confirm Password',
-                              labelStyle: TextStyle(
-                                  color: Theme.of(context).primaryColorDark),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 3,
-                                    color: Theme.of(context).primaryColor),
-                              ),
-                            ),
-                            obscureText: true,
-                            validator: (String? confirmedPassword) {
-                              // Validation checks go here
-                              if (confirmedPassword != null &&
-                                  password.length > 1) {
-                                if (confirmedPassword == password) {
-                                  passwordsMatch = true;
-                                } else {
-                                  passwordsMatch = false;
-                                }
-                              }
-                            },
-                          ),
-                          _spacer(),
-                          TextFormField(
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColorDark),
-                            decoration: InputDecoration(
                               icon: Icon(Icons.phone,
                                   color: Theme.of(context).primaryColor),
                               iconColor: Theme.of(context).primaryColor,
@@ -226,18 +160,79 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ],
                       ),
                     ),
+                    TextFormField(
+                      style:
+                          TextStyle(color: Theme.of(context).primaryColorDark),
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.lock,
+                            color: Theme.of(context).primaryColor),
+                        iconColor: Theme.of(context).primaryColor,
+                        hintText: 'Password',
+                        hintStyle:
+                            TextStyle(color: Theme.of(context).primaryColor),
+                        labelText: 'Password',
+                        labelStyle: TextStyle(
+                            color: Theme.of(context).primaryColorDark),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 3, color: Theme.of(context).primaryColor),
+                        ),
+                      ),
+                      obscureText: true,
+                      onSaved: (String? password) {
+                        // Sent when a form is saved
+                        if (password != null) {
+                          this.password = password;
+                        }
+                      },
+                      validator: (String? password) {
+                        // Validation checks go here
+                        if (password != null && password.length > 1) {
+                          _formKey.currentState!.save();
+                        }
+                      },
+                    ),
+                    TextFormField(
+                      style:
+                          TextStyle(color: Theme.of(context).primaryColorDark),
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.lock,
+                            color: Theme.of(context).primaryColor),
+                        iconColor: Theme.of(context).primaryColor,
+                        hintText: 'Confirm Password',
+                        hintStyle:
+                            TextStyle(color: Theme.of(context).primaryColor),
+                        labelText: 'Confirm Password',
+                        labelStyle: TextStyle(
+                            color: Theme.of(context).primaryColorDark),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 3, color: Theme.of(context).primaryColor),
+                        ),
+                      ),
+                      obscureText: true,
+                      validator: (String? confirmedPassword) {
+                        // Validation checks go here
+                        if (confirmedPassword != null && password.length > 1) {
+                          if (confirmedPassword == password) {
+                            passwordsMatch = true;
+                          } else {
+                            passwordsMatch = false;
+                          }
+                        }
+                      },
+                    ),
                     const Padding(
                       padding: EdgeInsets.fromLTRB(0, 25, 0, 0),
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        if(!passwordsMatch) {
+                        if (!passwordsMatch) {
                           setState(() {
                             errorOutput = 'Passwords do not match.';
                             invalidCreds = true;
                           });
-                        }
-                        else {
+                        } else {
                           createUserWithEmailAndPassword();
                         }
                       },

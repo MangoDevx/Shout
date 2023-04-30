@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/src/controllers/homecontroller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:frontend/auth.dart';
+import 'package:frontend/src/views/settingsview.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -38,7 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
               BottomChatBar(
                 onSendMessage: (String message) {
                   // TODO: Handle message sending
-
                 },
               )
             ],
@@ -68,6 +68,10 @@ class _HomeScreenState extends State<HomeScreen> {
           tooltip: 'Open Settings',
           onPressed: () {
             // TODO: Open settings
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SettingsScreen()),
+            );
           },
         ),
       ],
