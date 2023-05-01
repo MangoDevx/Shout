@@ -9,8 +9,8 @@ Future<bool> requestPermissions(BuildContext context) async {
   }
   // Request needed permissions
   Map<Permission, PermissionStatus> _ = await [
-    Permission.location,
     Permission.notification,
+    Permission.location
   ].request();
 
   // If location is disabled display an error

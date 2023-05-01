@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/src/controllers/startupcontroller.dart';
 import 'package:frontend/src/views/loginview.dart';
 import 'package:frontend/src/views/nolocationview.dart';
+import 'package:google_api_availability/google_api_availability.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -20,6 +21,7 @@ class SplashScreenState extends State<SplashScreen> {
   initState() {
     super.initState();
     var screen = const LoginScreen();
+
     Future.delayed(
         const Duration(seconds: 3),
         () async => {

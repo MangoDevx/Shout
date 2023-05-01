@@ -1,7 +1,9 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/src/controllers/homecontroller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:frontend/auth.dart';
+import 'package:frontend/src/models/usermodel.dart';
 import 'package:frontend/src/views/settingsview.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,9 +15,25 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final User? user = Auth().currentUser;
+  final messageList = <String>[
+    "Test User@uThis is a test message from another user.",
+    "${UserModel().username}@uThis is a test message from myself"
+  ];
 
-  Future<void> signOut() async {
-    await Auth().signOut();
+  void handleMessages(List<String> messageList) {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      var user = message.data["username"];
+      var body = message.data["body"];
+      setState(() {
+        messageList.add('$user@u$body');
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    handleMessages(messageList);
   }
 
   @override
@@ -29,16 +47,15 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               Expanded(
-                child: ListView.builder(
-                  itemCount: 0,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container();
-                  },
-                ),
-              ),
+                  child: MessageListWidget(
+                items: messageList,
+              )),
               BottomChatBar(
-                onSendMessage: (String message) {
-                  // TODO: Handle message sending
+                onSendMessage: (String message) async {
+                  await sendMessage(message);
+                  setState(() {
+                    messageList.add("${UserModel().username}@u$message");
+                  });
                 },
               )
             ],
@@ -92,7 +109,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: const Text('Go back'),
               ),
               TextButton(
-                onPressed: () {}, // TODO: Exit app
+                onPressed: () {
+                  Auth().signOut();
+                },
                 child: const Text('Exit'),
               ),
             ],
@@ -124,11 +143,11 @@ class _BottomChatBarState extends State<BottomChatBar> {
             color: Colors.grey.withOpacity(0.5),
             spreadRadius: 2,
             blurRadius: 3,
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Row(
         children: <Widget>[
           IconButton(
@@ -191,3 +210,112 @@ class _BottomChatBarState extends State<BottomChatBar> {
     });
   }
 }
+
+class MessageListWidget extends StatelessWidget {
+  final List<String> items;
+
+  const MessageListWidget({Key? key, required this.items}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      child: ListView.builder(
+        itemCount: items.length,
+        itemBuilder: (BuildContext context, int index) {
+          final itemText = items[index];
+          final isMe = itemText.startsWith(UserModel().username);
+          final bubbleColor = isMe ? Colors.purple : Colors.blue;
+
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Align(
+              alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+              child: BubbleItem(body: itemText.split('@u')[1], username: itemText.split('@u')[0], color: bubbleColor,),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class BubbleItem extends StatelessWidget {
+  final String body;
+  final Color color;
+  final String username;
+
+  const BubbleItem({
+    Key? key,
+    required this.body,
+    required this.color,
+    required this.username,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double maxWidth = screenWidth * 0.6;
+
+    final BorderRadiusGeometry borderRadius = BorderRadius.only(
+      topLeft: const Radius.circular(16.0),
+      topRight: const Radius.circular(16.0),
+      bottomLeft: (username == UserModel().username) ? const Radius.circular(16.0) : Radius.circular(0.0),
+      bottomRight: (username == UserModel().username) ? const Radius.circular(0.0) : Radius.circular(16.0),
+    );
+
+    final String content = body.startsWith('${UserModel().username}@u')
+        ? body.replaceFirst('${UserModel().username}@u', '').trim()
+        : body.trim();
+
+    return Column(
+      crossAxisAlignment:
+      (username == UserModel().username) ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+          child: Text(
+            username,
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: 12.0,
+            ),
+          ),
+        ),
+        Container(
+          constraints: BoxConstraints(
+            maxWidth: maxWidth,
+          ),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.8),
+            borderRadius: borderRadius,
+          ),
+          padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                content,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  double _getTextWidth(BuildContext context, String text) {
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(
+        text: text,
+        style: const TextStyle(color: Colors.white),
+      ),
+      maxLines: 1,
+      textDirection: TextDirection.ltr,
+    )..layout(maxWidth: double.infinity);
+
+    return textPainter.size.width + 32.0; // padding left + right
+  }
+}
+

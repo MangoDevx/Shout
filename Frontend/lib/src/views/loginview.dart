@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/src/controllers/loginregistercontroller.dart';
+import 'package:frontend/src/models/usermodel.dart';
 import 'package:frontend/src/views/homeview.dart';
 import 'package:frontend/src/views/registrationview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,11 +16,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String email = '';
   String password = '';
-  bool invalidCreds = false;
   String errorOutput = '';
   final GlobalKey<FormState> _formKey = GlobalKey();
-
-  String? errorMessage = '';
   bool isLogin = true;
 
   Future<void> signInWithEmailAndPassword() async {
@@ -29,12 +26,13 @@ class _LoginScreenState extends State<LoginScreen> {
       loginUser();
     } on FirebaseAuthException catch (e) {
       setState(() {
-        errorMessage = e.message;
+        errorOutput = e.message ?? 'Unknown Error.';
       });
     }
   }
 
   void loginUser() {
+    UserModel().setUsername(email.split('@')[0].substring(0, 12));
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const HomeScreen()),
@@ -202,7 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _errorText(String error) {
-    if (invalidCreds == true) {
+    if (errorOutput != '') {
       return Text(
         error,
         style: const TextStyle(color: Colors.red),
