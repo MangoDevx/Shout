@@ -1,7 +1,6 @@
 using FirebaseAdmin;
 using FirebaseAdmin.Messaging;
 using Google.Apis.Auth.OAuth2;
-using System.Runtime.CompilerServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +21,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 var googleCredential = builder.Configuration["ConnectionStrings:GoogleCred"];
+
 
 var firebaseApp = FirebaseApp.Create(new AppOptions()
 {

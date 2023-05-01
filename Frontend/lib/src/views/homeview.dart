@@ -15,10 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final User? user = Auth().currentUser;
-  final messageList = <String>[
-    "Test User@uThis is a test message from another user.",
-    "${UserModel().username}@uThis is a test message from myself"
-  ];
+  final messageList = <String>[];
 
   void handleMessages(List<String> messageList) {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
