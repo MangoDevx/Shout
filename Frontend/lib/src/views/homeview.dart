@@ -21,9 +21,11 @@ class _HomeScreenState extends State<HomeScreen> {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       var user = message.data["username"];
       var body = message.data["body"];
-      setState(() {
-        messageList.add('$user@u$body');
-      });
+      if (user != UserModel().username) {
+        setState(() {
+          messageList.add('$user@u$body');
+        });
+      }
     });
   }
 
@@ -228,7 +230,11 @@ class MessageListWidget extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 8.0),
             child: Align(
               alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-              child: BubbleItem(body: itemText.split('@u')[1], username: itemText.split('@u')[0], color: bubbleColor,),
+              child: BubbleItem(
+                body: itemText.split('@u')[1],
+                username: itemText.split('@u')[0],
+                color: bubbleColor,
+              ),
             ),
           );
         },
@@ -257,8 +263,12 @@ class BubbleItem extends StatelessWidget {
     final BorderRadiusGeometry borderRadius = BorderRadius.only(
       topLeft: const Radius.circular(16.0),
       topRight: const Radius.circular(16.0),
-      bottomLeft: (username == UserModel().username) ? const Radius.circular(16.0) : Radius.circular(0.0),
-      bottomRight: (username == UserModel().username) ? const Radius.circular(0.0) : Radius.circular(16.0),
+      bottomLeft: (username == UserModel().username)
+          ? const Radius.circular(16.0)
+          : Radius.circular(0.0),
+      bottomRight: (username == UserModel().username)
+          ? const Radius.circular(0.0)
+          : Radius.circular(16.0),
     );
 
     final String content = body.startsWith('${UserModel().username}@u')
@@ -266,8 +276,9 @@ class BubbleItem extends StatelessWidget {
         : body.trim();
 
     return Column(
-      crossAxisAlignment:
-      (username == UserModel().username) ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      crossAxisAlignment: (username == UserModel().username)
+          ? CrossAxisAlignment.end
+          : CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
@@ -315,4 +326,3 @@ class BubbleItem extends StatelessWidget {
     return textPainter.size.width + 32.0; // padding left + right
   }
 }
-
