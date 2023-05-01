@@ -8,7 +8,7 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: ShoutMessaging
-  AZURE_WEBAPP_PACKAGE_PATH: "./ShoutAPI/bin/Release/net7.0/publish"
+  AZURE_WEBAPP_PACKAGE_PATH: "./FirebaseMiddleman/bin/Release/net7.0/publish"
 
 jobs:
   publish:
@@ -23,13 +23,13 @@ jobs:
           dotnet-version: '7.0.x'
 
       - name: Restore
-        run: dotnet restore ./ShoutAPI/ShoutAPI.sln
+        run: dotnet restore ./FirebaseMiddleman/FirebaseMiddleman.sln
 
       - name: Build
-        run: dotnet build ./ShoutAPI/ShoutAPI.sln --configuration Release --no-restore
+        run: dotnet build ./FirebaseMiddleman/FirebaseMiddleman.sln --configuration Release --no-restore
 
       - name: Publish
-        run: dotnet publish ./ShoutAPI/ShoutAPI.sln --configuration Release --no-build
+        run: dotnet publish ./FirebaseMiddleman/FirebaseMiddleman.sln --configuration Release --no-build
 
       - name: Deployment
         uses: azure/webapps-deploy@v2
