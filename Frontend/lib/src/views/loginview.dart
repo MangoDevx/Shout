@@ -32,7 +32,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void loginUser() {
-    UserModel().setUsername(email.split('@')[0].substring(0, 12));
+    var username = email.split('@')[0];
+    if (username.length > 12) {
+      UserModel().setUsername(username.substring(0, 12));
+    }
+    else {
+      UserModel().setUsername(username);
+    }
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const HomeScreen()),
