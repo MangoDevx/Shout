@@ -3,8 +3,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
-   <application
-        android:label="frontend"
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+    <application
+        android:label="Shout!"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
@@ -33,5 +35,12 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-    </application>
+
+       <meta-data
+           android:name="firebase_messaging_auto_init_enabled"
+           android:value="false" />
+       <meta-data
+           android:name="firebase_analytics_collection_enabled"
+           android:value="false" />
+   </application>
 </manifest>

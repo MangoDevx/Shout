@@ -4,13 +4,13 @@ import 'dart:io' show Platform;
 
 Future<bool> requestPermissions(BuildContext context) async {
   // Check if they are on a mobile phone
-  if(!Platform.isAndroid && !Platform.isIOS) {
+  if (!Platform.isAndroid && !Platform.isIOS) {
     return true;
   }
   // Request needed permissions
   Map<Permission, PermissionStatus> _ = await [
-    Permission.location,
     Permission.notification,
+    Permission.location
   ].request();
 
   // If location is disabled display an error

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/src/controllers/startupcontroller.dart';
 import 'package:frontend/src/views/loginview.dart';
+import 'package:frontend/src/views/nolocationview.dart';
+import 'package:google_api_availability/google_api_availability.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -18,6 +20,8 @@ class SplashScreenState extends State<SplashScreen> {
   @override
   initState() {
     super.initState();
+    var screen = const LoginScreen();
+
     Future.delayed(
         const Duration(seconds: 3),
         () async => {
@@ -25,7 +29,15 @@ class SplashScreenState extends State<SplashScreen> {
                 {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const LoginScreen()),
+                    MaterialPageRoute(builder: (context) => screen),
+                  )
+                }
+              else
+                {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const NoLocationScreen()),
                   )
                 },
             });
